@@ -24,5 +24,8 @@
   "license": "WTFPL",
   "bugs": {
     "url": "https://github.com/rjz/epitaph/issues"
+  },
+  "dependencies": {
+    "through": "~2.3.4"
   }
 }

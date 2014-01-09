@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+var through = require('through');
+var epitaph = require('../index');
+
+process.stdin.pipe(through(function (buf) {
+  process.stderr.write(epitaph(buf.toString()));
+}));
+
