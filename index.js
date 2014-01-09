@@ -1,4 +1,3 @@
-
 function pad (width, padding) {
   return new Array(width).join(padding);
 }
@@ -32,8 +31,16 @@ module.exports = function epitaph (inscription, options) {
   if (typeof inscription === 'string') {
     message = inscription.split('\n');
   }
+  else if (inscription instanceof Buffer) {
+    message = inscription.toString().split('\n');
+  }
+  else if (inscription instanceof Error) {
+    message = inscription.stack.toString().split('\n').map(function (s) {
+      return s.substr(0, 50) + '...'
+    });
+  }
   else {
-    message = inscription;
+    return new ReferenceError();
   }
 
   lines = opts.prefix.concat(message, opts.postfix);
@@ -42,7 +49,10 @@ module.exports = function epitaph (inscription, options) {
     return (val.length > memo) ? val.length : memo;
   }, 0) + opts.padding;
 
-  var inscribed = lines.map(function (l) {
+  var inscribed = lines.map(function (str) {
+
+    var l = str.replace(/\t/g, '  ');
+
     var padL = new Array(Math.floor((width - l.length) / 2)).join(' '),
         padR = new Array(width - l.length - padL.length).join(' ');
 
