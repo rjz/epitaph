@@ -1,5 +1,25 @@
+var fs = require('fs'),
+    path = require('path');
+
+var epitaphs = null;
+
+function sample (arr) {
+  var i = Math.floor(Math.random() * arr.length);
+  return arr[i];
+}
+
 function pad (width, padding) {
   return new Array(width).join(padding);
+}
+
+function fromEpitaphs () {
+  var content;
+  if (epitaphs === null) {
+    content = fs.readFileSync(path.resolve(__dirname, 'epitaphs'));
+    epitaphs = content.toString().split('%\n');
+  }
+
+  return sample(epitaphs).split('\n');
 }
 
 function grow (width, height) {
@@ -7,6 +27,26 @@ function grow (width, height) {
   return rows.map(function () {
     return '||' + pad(width, ' ') + '|';
   });
+}
+
+function normalizeInscription (inscription) {
+
+  if (!inscription) {
+    return fromEpitaphs();
+  }
+  else if (typeof inscription === 'string') {
+    return inscription.split('\n');
+  }
+  else if (inscription instanceof Buffer) {
+    return inscription.toString().split('\n');
+  }
+  else if (inscription instanceof Error) {
+    return inscription.stack.toString().split('\n').map(function (s) {
+      return s.substr(0, 50) + '...'
+    });
+  }
+
+  return null;
 }
 
 module.exports = function epitaph (inscription, options) {
@@ -28,19 +68,10 @@ module.exports = function epitaph (inscription, options) {
     opts[key] = options[key] || defaults[key];
   }
 
-  if (typeof inscription === 'string') {
-    message = inscription.split('\n');
-  }
-  else if (inscription instanceof Buffer) {
-    message = inscription.toString().split('\n');
-  }
-  else if (inscription instanceof Error) {
-    message = inscription.stack.toString().split('\n').map(function (s) {
-      return s.substr(0, 50) + '...'
-    });
-  }
-  else {
-    return new ReferenceError();
+  message = normalizeInscription(inscription);
+
+  if (!message) {
+    return epitaph(new ReferenceError(fromEpitaphs()), options);
   }
 
   lines = opts.prefix.concat(message, opts.postfix);
@@ -72,7 +103,6 @@ module.exports = function epitaph (inscription, options) {
       .concat(pad(width + 3, '|'));
   };
 
-  //return inscribed.join('\n');
   return drawing(width).join('\n');
 };
 
