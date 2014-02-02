@@ -8,7 +8,7 @@
   },
   "preferGlobal": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/jshint/bin/jshint *.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,8 @@
   },
   "dependencies": {
     "through": "~2.3.4"
+  },
+  "devDependencies": {
+    "jshint": "~2.4.3"
   }
 }

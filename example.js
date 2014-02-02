@@ -12,7 +12,7 @@ console.error = function (lines) {
   };
 
   err(epitaph(lines, opts));
-}
+};
 
 console.error('Once a process,\nnow departed\nLeft its author\nbroken-hearted');
 

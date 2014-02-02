@@ -42,7 +42,7 @@ function normalizeInscription (inscription) {
   }
   else if (inscription instanceof Error) {
     return inscription.stack.toString().split('\n').map(function (s) {
-      return s.substr(0, 50) + '...'
+      return s.substr(0, 50) + '...';
     });
   }
 
@@ -57,7 +57,7 @@ module.exports = function epitaph (inscription, options) {
     after: Math.floor(Math.random() * 6) + 3,
     padding: Math.floor(Math.random() * 8) + 8,
     prefix: ['R.I.P.', ''],
-    postfix: ['', '??? - ' + (new Date).getFullYear()]
+    postfix: ['', '??? - ' + (new Date()).getFullYear()]
   };
 
   var lines, message, width, opts = {};
@@ -87,7 +87,7 @@ module.exports = function epitaph (inscription, options) {
     var padL = new Array(Math.floor((width - l.length) / 2)).join(' '),
         padR = new Array(width - l.length - padL.length).join(' ');
 
-    return '||' + padL + l + padR + '|'
+    return '||' + padL + l + padR + '|';
   });
 
   var drawing = function (width) {
