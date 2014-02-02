@@ -1,6 +1,6 @@
 {
   "name": "epitaph",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "errors, in memoriam",
   "main": "index.js",
   "bin": {
