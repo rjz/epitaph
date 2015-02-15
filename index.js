@@ -1,6 +1,9 @@
 var fs = require('fs'),
     path = require('path');
 
+var sprites = require('./lib/sprites');
+var ascii = require('./lib/ascii');
+
 var epitaphs = null;
 
 function sample (arr) {
@@ -47,6 +50,27 @@ function normalizeInscription (inscription) {
   }
 
   return null;
+}
+
+function drawSprite (spriteName, drawing, offsetX) {
+  var sprite = sprites[spriteName];
+  var offsetY = drawing.length - sprite.length;
+  ascii.blit(sprite, drawing, offsetX, offsetY)
+}
+
+function decorate (drawing) {
+
+  var drawingWidth = drawing[0].length;
+
+  var spriteName,
+      spriteNames = Object.keys(sprites);
+
+  for (var i = 0; i < drawingWidth; i++) {
+    spriteName = spriteNames[Math.floor(Math.random() * spriteNames.length)];
+    drawSprite(spriteName, drawing, i);
+  }
+
+  return drawing;
 }
 
 module.exports = function epitaph (inscription, options) {
@@ -100,9 +124,9 @@ module.exports = function epitaph (inscription, options) {
       .concat(grow(width, opts.before))
       .concat(inscribed)
       .concat(grow(width, opts.after))
-      .concat(pad(width + 3, '|'));
+      .map(ascii.stringToArray);
   };
 
-  return drawing(width).join('\n');
+  return decorate(drawing(width)).map(ascii.arrayToString).join('\n');
 };
 
