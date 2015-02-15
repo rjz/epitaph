@@ -11,10 +11,6 @@ function sample (arr) {
   return arr[i];
 }
 
-function pad (width, padding) {
-  return new Array(width).join(padding);
-}
-
 function fromEpitaphs () {
   var content;
   if (epitaphs === null) {
@@ -28,7 +24,7 @@ function fromEpitaphs () {
 function grow (width, height) {
   var rows = new Array(height).join('.').split('.');
   return rows.map(function () {
-    return '||' + pad(width, ' ') + '|';
+    return '||' + ascii.pad(width, ' ') + '|';
   });
 }
 
@@ -62,12 +58,10 @@ function decorate (drawing) {
 
   var drawingWidth = drawing[0].length;
 
-  var spriteName,
-      spriteNames = Object.keys(sprites);
+  var spriteNames = Object.keys(sprites);
 
   for (var i = 0; i < drawingWidth; i++) {
-    spriteName = spriteNames[Math.floor(Math.random() * spriteNames.length)];
-    drawSprite(spriteName, drawing, i);
+    drawSprite(sample(spriteNames), drawing, i);
   }
 
   return drawing;
@@ -116,8 +110,8 @@ module.exports = function epitaph (inscription, options) {
 
   var drawing = function (width) {
     var cap = [
-      ' _' + pad(width, '_') + ' ',
-      '//' + pad(width, ' ') + '\\'
+      ' _' + ascii.pad(width, '_') + ' ',
+      '//' + ascii.pad(width, ' ') + '\\'
     ];
 
     return cap
