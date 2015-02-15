@@ -58,8 +58,14 @@ Or the CLI:
 And when something goes wrong:
 
     // ...
-    catch (e) {
-      console.error('Once a process,\nnow departed\nLeft its author\nbroken-hearted');
+    catch (err) {
+      console.error([
+        'Once a process,',
+        'now departed',
+        'Left its author',
+        'broken-hearted',
+        ''
+      ].concat(err.toString()).join('\n'));
     }
 
 ### License
